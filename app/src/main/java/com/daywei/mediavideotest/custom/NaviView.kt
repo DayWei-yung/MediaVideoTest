@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
@@ -12,8 +13,10 @@ import com.daywei.mediavideo.databinding.LayoutMainBottomBinding
 import com.daywei.mediavideotest.base.BaseListener
 import com.daywei.mediavideotest.base.BaseViewModel
 import com.daywei.mediavideotest.base.Event
+import com.daywei.mediavideotest.consts.APP_TAG
 import com.daywei.mediavideotest.consts.EVENT_NAVI_AUDIO_LOAD
 import com.daywei.mediavideotest.entity.NaviData
+import com.daywei.mediavideotest.ui.MainActivity
 import com.daywei.mediavideotest.ui.NaviModel
 
 @SuppressLint("ResourceType")
@@ -63,5 +66,9 @@ class NaviView(val cxt: Context, var attr: AttributeSet?, var style: Int, var st
         } else {
             mBinding?.imgNavi?.setImageBitmap(mData?.unselect)
         }
+    }
+
+    fun getSelected(): Boolean {
+        return mSelected;
     }
 }

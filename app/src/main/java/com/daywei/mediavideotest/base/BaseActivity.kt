@@ -5,14 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
 
 abstract class BaseActivity<T : ViewDataBinding, E : BaseViewModel> :
     AppCompatActivity(), BaseListener, Observer<Event?> {
 
-    protected var mViewModel: E? = null
-    protected var mBinding: T? = null
+    protected lateinit var mViewModel: E
+    protected lateinit var mBinding: T
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,40 +18,38 @@ abstract class BaseActivity<T : ViewDataBinding, E : BaseViewModel> :
         mBinding = DataBindingUtil.inflate(layoutInflater, getResId(), null, false)
 
         mViewModel = getViewModel()
-        setContentView(mBinding?.root)
+        setContentView(mBinding.root)
         init()
     }
 
     override fun onStart() {
         super.onStart()
-        mViewModel?.onUiCreate(this, this)
+        mViewModel.onUiCreate(this, this)
     }
 
     override fun onStop() {
         super.onStop()
-        mViewModel?.onUiDestroy(this)
+        mViewModel.onUiDestroy(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         release()
-        mViewModel = null
     }
 
     abstract fun getViewModel(): E
     abstract fun getResId(): Int
     abstract fun init()
     open fun release() {
-        mViewModel = null
-        mBinding = null
+
     }
 
     override fun request(event: Event?) {
-        mViewModel?.onRequest(event)
+        mViewModel.onRequest(event)
     }
 
-    override fun onChanged(t: Event?) {
-        onEvent(t)
+    override fun onChanged(value: Event?) {
+        onEvent(value)
     }
 
     protected fun post(run: () -> Unit) {

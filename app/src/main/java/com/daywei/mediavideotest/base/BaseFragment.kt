@@ -12,8 +12,8 @@ import androidx.lifecycle.Observer
 abstract class BaseFragment<T : ViewDataBinding, E : BaseViewModel> :
     Fragment(), BaseListener, Observer<Event?> {
 
-    protected var mViewModel: E? = null
-    protected var mBinding: T? = null
+    protected lateinit var mViewModel: E
+    protected lateinit var mBinding: T
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,30 +21,29 @@ abstract class BaseFragment<T : ViewDataBinding, E : BaseViewModel> :
         savedInstanceState: Bundle?
     ): View? {
         mViewModel = getViewModel()
-        return inflater.inflate(getResource(), container)
+        return inflater.inflate(getResource(), container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding = DataBindingUtil.findBinding(view)
-        mViewModel?.onUiCreate(this, this)
+        mBinding = DataBindingUtil.bind<T>(view)!!
+        mViewModel.onUiCreate(this, this)
         init()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (hidden) {
-            mViewModel?.onHide()
+            mViewModel.onHide()
         } else {
-            mViewModel?.onShow()
+            mViewModel.onShow()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         release()
-        mViewModel?.onUiDestroy(this)
-        mViewModel = null
+        mViewModel.onUiDestroy(this)
     }
 
     abstract fun getResource(): Int
@@ -52,10 +51,10 @@ abstract class BaseFragment<T : ViewDataBinding, E : BaseViewModel> :
     abstract fun init()
     abstract fun release()
     override fun request(event: Event?) {
-        mViewModel?.onRequest(event)
+        mViewModel.onRequest(event)
     }
 
-    override fun onChanged(t: Event?) {
-        onEvent(t)
+    override fun onChanged(value: Event?) {
+        onEvent(value)
     }
 }

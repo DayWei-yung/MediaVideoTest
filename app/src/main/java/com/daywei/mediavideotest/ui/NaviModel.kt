@@ -12,11 +12,12 @@ import com.daywei.mediavideotest.base.Event
 import com.daywei.mediavideotest.consts.*
 import com.daywei.mediavideotest.entity.NaviData
 import com.daywei.mediavideotest.manager.ResourceManager
+import com.daywei.mediavideotest.sApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class NaviModel(application: Application) : BaseViewModel(application) {
+class NaviModel(application: Application = sApplicationContext as Application) : BaseViewModel() {
 
     companion object {
         private val TAG = NaviModel::class.java.simpleName

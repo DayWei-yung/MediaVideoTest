@@ -1,9 +1,8 @@
 package com.daywei.mediavideotest.base
 
-import android.app.Application
 import androidx.lifecycle.*
 
-abstract class BaseViewModel(application: Application) : AndroidViewModel(application) {
+abstract class BaseViewModel() : ViewModel() {
 
     val mEvent: MutableLiveData<Event> = MutableLiveData()
 
